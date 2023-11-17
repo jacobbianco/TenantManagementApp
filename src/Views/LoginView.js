@@ -42,7 +42,7 @@ function LoginView() {
                             <div className="text-center my-lg-5">
                                 <h5> Please Sign In </h5>
                                 <div>
-                                    <input onChange={(event) => setInput(event.target.value)}
+                                    <input value={input} onChange={(event) => setInput(event.target.value)}
                                            className="bg-light text-dark w-50" type="email" placeholder="Enter email"/>
                                     <Button className="bg-dark mx-2"
                                             onClick={() => handleSubmit(input)}> Submit </Button>
