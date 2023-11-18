@@ -23,9 +23,24 @@ function GetDbFunctions () {
 
         return res;
     }
+    const createAccount = async (email, name, phone) => {
+        try {
+            db.collection('Accounts').add({
+                Email: email,
+                ID: Date.now(),
+                Name: name,
+                PhoneNumber: phone,
+                Type: "Tenant"
+            })
+        }
+        catch (error) {
+            console.error('Error creating account:', error.message);
+        }
+    }
 
     return{
-        authorizeUser
+        authorizeUser,
+        createAccount
     }
 }
 
