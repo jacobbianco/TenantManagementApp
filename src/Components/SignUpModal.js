@@ -30,7 +30,7 @@ function SignUpModal (props) {
 
     return (
         <div>
-            <Modal show={props.modalOpen} onHide={props.handleModalOpen}>
+            <Modal show={props.modalOpen} onHide={props.handleModalOpen} className="modal-lg">
                 <Modal.Header closeButton>
                     <Modal.Title> Sign Up </Modal.Title>
                 </Modal.Header>

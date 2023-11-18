@@ -1,6 +1,16 @@
 import {Container, Nav, Navbar} from "react-bootstrap";
+import {useState} from "react";
+import SettingsModal from "./SettingsModal";
 
-const AppNavbar = () => {
+
+const AppNavbar = (props) => {
+
+    const [modalOpen, setModalOpen] = useState(false)
+
+    const handleModalOpen = () => {
+        setModalOpen(!modalOpen);
+    }
+
     return (
         <Navbar expand="lg" className="bg-body-tertiary">
             <Container>
@@ -8,11 +18,16 @@ const AppNavbar = () => {
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />
                 <Navbar.Collapse id="basic-navbar-nav">
                     <Nav className="ms-auto">
-                        <Nav.Link href="/home">Home</Nav.Link>
-                        <Nav.Link href="/settings">Settings</Nav.Link>
+                    <Nav.Link onClick={handleModalOpen}> Settings </Nav.Link>
+                    <Nav.Link href="/Login">Log Out</Nav.Link>
                     </Nav>
                 </Navbar.Collapse>
             </Container>
+            <SettingsModal
+                modalOpen={modalOpen}
+                handleModalOpen={handleModalOpen}
+                user={props.user}
+            />
         </Navbar>
     );
 }

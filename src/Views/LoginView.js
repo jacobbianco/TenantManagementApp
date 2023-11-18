@@ -5,9 +5,6 @@ import GetDbFunctions from "../Database/GetDbFunctions";
 import {Navigate} from "react-router-dom";
 import SignUpModal from "../Components/SignUpModal";
 
-
-
-
 function LoginView() {
 
     const [input, setInput] = useState('');
@@ -17,6 +14,11 @@ function LoginView() {
     const dbFunctions = GetDbFunctions();
 
     const handleSubmit = (input) => {
+        input.trim();
+        if(input === ''){
+            setQueryResponse('Please enter an email');
+            return;
+        }
         dbFunctions.authorizeUser(input)
             .then((res) => {
                 res === 'Account not found' ? setQueryResponse(res) : setUser(JSON.parse(res))
@@ -30,12 +32,7 @@ function LoginView() {
 
     //if user logged in redirect them to their view
     if (user) {
-        if (user.Type === 'Tenant')
-            return <Navigate replace to="/TenantHome"/>;
-        else if (user.Type === 'Employee')
-            return <Navigate replace to="/EmployeeHome"/>;
-        else
-            return <Navigate replace to="/ManagerHome"/>;
+        return <Navigate replace to="/Home" state={user}/>;
     }
     //else display their login page
     else {
@@ -53,7 +50,7 @@ function LoginView() {
                                                if(event.key === 'Enter'){
                                                    event.preventDefault();
                                                    handleSubmit(input);   }}}
-                                           className="bg-light text-dark w-50 mt-3" type="email" placeholder="Enter email"/>
+                                           className="bg-light text-dark w-50 mt-3 " type="email" placeholder="Enter email"/>
                                     <Button className="bg-dark border-0 mx-2"
                                             onClick={() => handleSubmit(input)}> Submit </Button>
                                 </div>

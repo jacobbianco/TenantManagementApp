@@ -1,7 +1,8 @@
 import {useEffect, useState} from "react";
 import database from "./InitDb"
+import {ref, uploadBytes, getDownloadURL, getStorage } from 'firebase/storage';
 
-//put all db functions in here
+
 function GetDbFunctions () {
 
     const [db, setDb] = useState(null);
@@ -37,10 +38,27 @@ function GetDbFunctions () {
             console.error('Error creating account:', error.message);
         }
     }
+    const createRequest = async (description, location, imageData) => {
+            try {
+                console.log(description, location, imageData)
+                if (imageData) {
+                    const storage = getStorage();
+                    const storageRef = ref(storage, imageData.name);
+                    await uploadBytes(storageRef, imageData);
+                    const downloadURL = await getDownloadURL(storageRef);
+                    console.log(downloadURL)
+                }
+            }
+                //db.collection('Requests').add({
+            catch (error) {
+                console.error('Error creating account:', error.message);
+            }
+    }
 
     return{
         authorizeUser,
-        createAccount
+        createAccount,
+        createRequest
     }
 }
 
