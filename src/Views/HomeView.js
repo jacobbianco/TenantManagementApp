@@ -13,7 +13,7 @@ function HomeView() {
         <div data-bs-theme="dark">
             <AppNavbar user={user}/>
             <Container>
-                <h2 className="my-4"> Welcome back, {user.Name} </h2>
+                <h2 className="my-4"> Welcome, {user.Name} </h2>
                 {user.Type === "Tenant" ? <TenantView user={user}/> : (user.Type === "Employee" ? <EmployeeView user={user}/> : <ManagerView user={user}/>) }
             </Container>
         </div>

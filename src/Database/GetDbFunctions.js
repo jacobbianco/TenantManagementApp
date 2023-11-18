@@ -24,6 +24,22 @@ function GetDbFunctions () {
 
         return res;
     }
+
+    const getApartment = async (ID) => {
+        if(db === null) return null
+        const querySnapshot = await db.collection('Apartments').where('RenterID', '==', ID).get();
+        let res;
+
+        if (querySnapshot.empty)
+            res = 'Account not found'
+
+        querySnapshot.forEach((doc) => {
+            res = JSON.stringify(doc.data());
+        });
+
+        return res;
+    }
+
     const createAccount = async (email, name, phone) => {
         try {
             db.collection('Accounts').add({
@@ -38,18 +54,32 @@ function GetDbFunctions () {
             console.error('Error creating account:', error.message);
         }
     }
-    const createRequest = async (description, location, imageData) => {
+    const createRequest = async (aptNum, description, location, imageData) => {
             try {
-                console.log(description, location, imageData)
-                if (imageData) {
+                let imageLink = '';
+                if (imageData !== null) {
                     const storage = getStorage();
                     const storageRef = ref(storage, imageData.name);
                     await uploadBytes(storageRef, imageData);
-                    const downloadURL = await getDownloadURL(storageRef);
-                    console.log(downloadURL)
+                    imageLink = await getDownloadURL(storageRef);
                 }
+                const timestamp = Date.now();
+                const dateObject = new Date(timestamp);
+                const formattedDate = dateObject.toLocaleDateString();
+                const formattedTime = dateObject.toLocaleTimeString();
+
+                db.collection('Requests').add({
+                    ApartmentNumber: aptNum,
+                    Area: location,
+                    Date: formattedDate,
+                    Time: formattedTime,
+                    Description: description,
+                    ID: timestamp, //works fine as a unique identifier(for now)
+                    Photo: imageLink,
+                    Status: 'Pending'
+                });
             }
-                //db.collection('Requests').add({
+
             catch (error) {
                 console.error('Error creating account:', error.message);
             }
@@ -58,7 +88,8 @@ function GetDbFunctions () {
     return{
         authorizeUser,
         createAccount,
-        createRequest
+        createRequest,
+        getApartment
     }
 }
 
