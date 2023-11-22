@@ -40,6 +40,23 @@ function GetDbFunctions () {
         return res;
     }
 
+    const getRequests = async (aptNum) => {
+        if(db === null || aptNum === undefined) return []
+        const querySnapshot = await db.collection('Requests').where('ApartmentNumber', '==', aptNum).get();
+        let res = [];
+
+        querySnapshot.forEach((doc) => {
+            res.push(doc.data());
+            res.sort((a, b) => {
+                const dateA = new Date(`${a.Date} ${a.Time}`);
+                const dateB = new Date(`${b.Date} ${b.Time}`);
+                return dateA - dateB;
+            });
+        });
+
+        return res;
+    }
+
     const createAccount = async (email, name, phone) => {
         try {
             db.collection('Accounts').add({
@@ -89,7 +106,8 @@ function GetDbFunctions () {
         authorizeUser,
         createAccount,
         createRequest,
-        getApartment
+        getApartment,
+        getRequests
     }
 }
 

@@ -1,26 +1,56 @@
 import {useEffect, useRef, useState} from "react";
 import {Button} from "react-bootstrap";
 import GetDbFunctions from "../Database/GetDbFunctions";
+import RequestsTable from "../Components/RequestsTable";
 
 function TenantView(props) {
 
-    const [apartment, setApartment] = useState(null)
-    const [description, setDescription] = useState('')
-    const [location, setLocation] = useState('')
+    const [user, setUser] = useState(null);
+    const [requests, setRequests] = useState(undefined);
+    const [apartment, setApartment] = useState(null);
+    const [description, setDescription] = useState('');
+    const [location, setLocation] = useState('');
     const [imageData, setImageData] = useState(null);
     const [errorMessage, setErrorMessage] = useState('');
     const dbFunctions = GetDbFunctions();
-    const fileInputRef = useRef(null);
 
+    const fileInputRef = useRef(null);
+    const [canShow , setCanShow] = useState(false);
+
+    // Set Time out
+    useEffect(()=>{
+        const timer = setTimeout( () => setCanShow(true) , 1000)
+        return () => clearTimeout(timer);
+    })
+
+    //Set the user when the component mounts, we only do this to prevent infinite loop of getting apt w/o dependency
+    useEffect(() => {
+        setUser(props.user)
+    },[props.user])
+
+    //Set the user's apartment when the user changes
     useEffect(() => {
         dbFunctions.getApartment(props.user.ID).then(
             apt => {
                 if(apt === 'Account not found') apt = null
                 setApartment(JSON.parse(apt))
-            }
+                }
         ).catch(error => console.log('Error getting apartment: ', error))
-    })
 
+    },[user]);
+
+    //Set the user's apartment when the user changes
+    useEffect(() => {
+        if (apartment !== null) {
+            dbFunctions.getRequests(apartment.Number).then(
+                reqs => {
+                    setRequests([reqs])
+                }
+            ).catch(error => console.log('Error getting requests: ', error))
+        }
+    },[apartment]);
+
+    //Set the image when a file is uploaded
     const handleImageChange = (event) => {
         const file = event.target.files[0];
         setImageData(file);
@@ -48,11 +78,13 @@ function TenantView(props) {
     };
 
     if(apartment === null)
-        return(<> <h4> You currently aren't renting an apartment. Please contact the property manager. </h4> </>);
+        return(<> {canShow ? <h4> You currently aren't renting an apartment. Please contact the property manager </h4> :
+            <div className="d-flex justify-content-center"> <div className="spinner-border" role="status"> </div> </div>}  </>);
     else
         return (
-        <div>
-            <h4>Maintenance Request Form</h4>
+        <div className="my-3">
+            <RequestsTable changeStatus={null} showCompleteButton={false} requests={requests}/>
+            <h3 className="text-center mt-5">Maintenance Request Form</h3>
             <form onSubmit={handleSubmit}>
                 <textarea value={description} onChange={(event) => setDescription(event.target.value)}
                     onKeyDown={(event) => {
@@ -74,5 +106,5 @@ function TenantView(props) {
         </div>
     );
 }
-
+//work on employee views next
 export default TenantView;

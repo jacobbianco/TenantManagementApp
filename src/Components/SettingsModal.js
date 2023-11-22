@@ -13,10 +13,12 @@ return (
             <Modal.Body>
                     <table className="table table-borderless">
                         <thead className="thead-dark">
-                        <tr> <th scope="col"> Name </th><th scope="col"> Email</th><th scope="col"> Phone Number </th><th scope="col"> ID Number </th> </tr>
+                        <tr> <th scope="col" className="text-center align-middle"> Name </th><th scope="col" className="text-center align-middle"> Email</th>
+                            <th scope="col" className="text-center align-middle"> Phone Number </th><th scope="col" className="text-center align-middle"> ID Number </th> </tr>
                         </thead>
                         <tbody>
-                        <tr> <td>{props.user.Name}</td><td>{props.user.Email}</td><td>{props.user.PhoneNumber}</td><td>{props.user.ID}</td> </tr>
+                        <tr> <td className="text-center align-middle">{props.user.Name}</td><td className="text-center align-middle">{props.user.Email}</td>
+                            <td className="text-center align-middle">{props.user.PhoneNumber}</td><td className="text-center align-middle">{props.user.ID}</td> </tr>
                         </tbody>
                     </table>
             </Modal.Body>
