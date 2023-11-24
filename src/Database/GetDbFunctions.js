@@ -2,14 +2,14 @@ import {useEffect, useState} from "react";
 import database from "./InitDb"
 import {ref, uploadBytes, getDownloadURL, getStorage } from 'firebase/storage';
 
-
 function GetDbFunctions () {
 
     const [db, setDb] = useState(null);
 
     useEffect(() => {
         setDb(database)
-    }, [db]);
+        console.log(db)
+    },[db]);
 
     const authorizeUser = async (email) => {
         const querySnapshot = await db.collection('Accounts').where('Email', '==', email).get();
@@ -47,11 +47,44 @@ function GetDbFunctions () {
 
         querySnapshot.forEach((doc) => {
             res.push(doc.data());
-            res.sort((a, b) => {
-                const dateA = new Date(`${a.Date} ${a.Time}`);
-                const dateB = new Date(`${b.Date} ${b.Time}`);
-                return dateA - dateB;
-            });
+        });
+        res.sort((a, b) => {
+            const dateA = new Date(`${a.Date} ${a.Time}`);
+            const dateB = new Date(`${b.Date} ${b.Time}`);
+            return dateB - dateA;
+        });
+        res.sort((a, b) => {
+            if (a.Status === 'Completed' && b.Status === 'Pending') {
+                return 1;
+            } else if (a.Status === 'Pending' && b.Status === 'Completed') {
+                return -1;
+            } else {
+                return 0;
+            }
+        });
+        return res;
+    }
+
+    const getAllRequests = async () => {
+        if(db === null) return []
+        const querySnapshot = await db.collection('Requests').get();
+        let res = [];
+        querySnapshot.forEach((doc) => {
+            res.push(doc.data());
+        });
+        res.sort((a, b) => {
+            const dateA = new Date(`${a.Date} ${a.Time}`);
+            const dateB = new Date(`${b.Date} ${b.Time}`);
+            return dateB - dateA;
+        });
+        res.sort((a, b) => {
+            if (a.Status === 'Completed' && b.Status === 'Pending') {
+                return 1;
+            } else if (a.Status === 'Pending' && b.Status === 'Completed') {
+                return -1;
+            } else {
+                return 0;
+                }
         });
 
         return res;
@@ -80,7 +113,7 @@ function GetDbFunctions () {
                     await uploadBytes(storageRef, imageData);
                     imageLink = await getDownloadURL(storageRef);
                 }
-                const timestamp = Date.now();
+                const timestamp = (Date.now());
                 const dateObject = new Date(timestamp);
                 const formattedDate = dateObject.toLocaleDateString();
                 const formattedTime = dateObject.toLocaleTimeString();
@@ -98,16 +131,48 @@ function GetDbFunctions () {
             }
 
             catch (error) {
-                console.error('Error creating account:', error.message);
+                console.error('Error creating request:', error.message);
             }
     }
+    const changeStatus = async (ID) => {
+        const querySnapshot = await db.collection('Requests').where('ID', '==', ID).get();
+
+        if (!querySnapshot.empty) {
+            const documentSnapshot = querySnapshot.docs[0];
+            await documentSnapshot.ref.update({
+                Status: "Completed"
+            });
+            console.log(`Status for document changed`);
+        } else {
+            console.log(`Document not found`);
+        }
+    }
+
+    /*
+    const deleteRequest = async (ID) => {
+        try {
+            db.collection('Requests').where('ID', '==', ID).get().then(res => {
+                let docId = res.docs[0].id;
+                db.collection('Requests').doc(docId).delete();
+            })
+            console.log('deleted', ID)
+        }
+        catch (error) {
+            console.error('Error deleting request:', error.message);
+        }
+    }
+    */
+
+
 
     return{
         authorizeUser,
         createAccount,
         createRequest,
+        changeStatus,
         getApartment,
-        getRequests
+        getRequests,
+        getAllRequests
     }
 }
 
