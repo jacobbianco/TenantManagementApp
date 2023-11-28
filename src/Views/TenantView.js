@@ -2,7 +2,7 @@ import {useEffect, useRef, useState} from "react";
 import {Button} from "react-bootstrap";
 import GetDbFunctions from "../Database/GetDbFunctions";
 import RequestsTable from "../Components/RequestsTable";
-import RequestForm from "../Components/RequestForm";
+import RequestsForm from "../Components/RequestsForm";
 
 function TenantView(props) {
 
@@ -52,7 +52,7 @@ function TenantView(props) {
     else
         return (
         <div>
-            <RequestForm aptNum={apartment.Number} dbFunctions ={dbFunctions}/>
+            <RequestsForm aptNum={apartment.Number} dbFunctions ={dbFunctions}/>
             <div className="my-5"></div>
             <RequestsTable changeStatus={null} showCompleteButton={false} requests={requests}/>
             <div className="my-5"></div>

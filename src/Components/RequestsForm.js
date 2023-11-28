@@ -2,7 +2,7 @@ import {Button} from "react-bootstrap";
 import {useState} from "react";
 
 
-function RequestForm (props){
+function RequestsForm (props){
 
     const [description, setDescription] = useState('');
     const [location, setLocation] = useState('');
@@ -64,4 +64,4 @@ function RequestForm (props){
 )
 }
 
-export default RequestForm;
+export default RequestsForm;

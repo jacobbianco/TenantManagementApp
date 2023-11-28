@@ -1,6 +1,6 @@
 import {Container, Nav, Navbar} from "react-bootstrap";
 import {useState} from "react";
-import SettingsModal from "./SettingsModal";
+import SettingsModal from "../Modals/SettingsModal";
 
 
 const AppNavbar = (props) => {

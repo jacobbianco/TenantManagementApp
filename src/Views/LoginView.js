@@ -3,7 +3,7 @@ import {Button, Container} from "react-bootstrap";
 import {useState} from "react";
 import GetDbFunctions from "../Database/GetDbFunctions";
 import {Navigate} from "react-router-dom";
-import SignUpModal from "../Components/SignUpModal";
+import SignUpModal from "../Modals/SignUpModal";
 
 function LoginView() {
 
