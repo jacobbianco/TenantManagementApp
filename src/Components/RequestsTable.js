@@ -6,7 +6,6 @@ function RequestsTable (props) {
     else {
         return (
             <div>
-                <h3 className="text-center"> Maintenance Requests </h3>
                 <table className="table border table-light">
                     <thead className="bg-dark">
                     <tr>

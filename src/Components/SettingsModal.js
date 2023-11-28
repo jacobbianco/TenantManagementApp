@@ -8,7 +8,7 @@ return (
     <div>
         <Modal show={props.modalOpen} onHide={props.handleModalOpen} className="modal-lg">
             <Modal.Header closeButton>
-                <Modal.Title> Settings </Modal.Title>
+                <Modal.Title className="w-100 text-center"> Settings </Modal.Title>
             </Modal.Header>
             <Modal.Body>
                     <table className="table table-borderless">

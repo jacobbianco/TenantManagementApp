@@ -8,7 +8,6 @@ function GetDbFunctions () {
 
     useEffect(() => {
         setDb(database)
-        console.log(db)
     },[db]);
 
     const authorizeUser = async (email) => {

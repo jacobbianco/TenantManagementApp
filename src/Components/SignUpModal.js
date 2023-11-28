@@ -32,22 +32,31 @@ function SignUpModal (props) {
         <div>
             <Modal show={props.modalOpen} onHide={props.handleModalOpen} className="modal-lg">
                 <Modal.Header closeButton>
-                    <Modal.Title> Sign Up </Modal.Title>
+                    <Modal.Title className="w-100 text-center"> Sign Up </Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <div className="text-center">
                         <div>
+                            <div className="w-100">
+                            <label htmlFor="email"> Email: </label>
                             <input value={email} onChange={(event) => setEmail(event.target.value)}
                                    onKeyDown={(event) => { if(event.key === 'Enter') event.preventDefault(); }}
-                                   className="bg-light text-dark w-75 mt-3" type="email" placeholder="Enter email"/>
+                                   className="bg-light text-dark w-75 m-3" name="email" type="email" placeholder="e.g. johndoe@gmail.com"/>
+                            </div>
+                            <div className="w-100">
+                            <label htmlFor="fullname"> Full Name: </label>
                             <input value={name} onChange={(event) => setName(event.target.value)}
                                    onKeyDown={(event) => { if(event.key === 'Enter') event.preventDefault(); }}
-                                   className="bg-light text-dark w-75 mt-3" placeholder="Enter your first and last name"/>
+                                   className="bg-light text-dark w-75 m-3" name="fullname" placeholder="e.g. John Doe"/>
+                            </div>
+                            <div className="w-100">
+                            <label htmlFor="phonenumber" className=""> Phone Number: </label>
                             <input value={phone} onChange={(event) => setPhone(event.target.value)}
                                    onKeyDown={(event) => { if(event.key === 'Enter') event.preventDefault(); }}
-                                   className="bg-light text-dark w-50 mt-3" placeholder="Enter your phone number"/>
+                                   className="bg-light text-dark w-50 m-3 " name="phonenumber" placeholder="e.g. 111-111-1111"/>
                             <Button className="bg-success border-0 mx-2"
                                     onClick={() => handleSubmit(email, name, phone)}> Submit </Button>
+                            </div>
                         </div>
                         <div className={queryResponse === '' ? "text-white" : (queryResponse === 'Account created' ? "text-success" : "text-danger fw-semibold")} >
                             {queryResponse === '' ? 'Placeholder' : (queryResponse === 'Account created' ? queryResponse : '*' + queryResponse)}
