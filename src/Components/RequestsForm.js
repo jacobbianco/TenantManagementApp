@@ -1,11 +1,12 @@
 import {Button} from "react-bootstrap";
 import {useState} from "react";
+import {Dropdown, DropdownButton} from "react-bootstrap";
 
 
 function RequestsForm (props){
 
     const [description, setDescription] = useState('');
-    const [location, setLocation] = useState('');
+    const [location, setLocation] = useState('Kitchen');
     const [imageData, setImageData] = useState(null);
     const [errorMessage, setErrorMessage] = useState('');
 
@@ -16,19 +17,13 @@ function RequestsForm (props){
     };
 
     const handleSubmit = () => {
-        description.trim(); location.trim();
-        if(description === '' && location === ''){
-            setErrorMessage('* Please enter a description and a location')
-        }
-        else if(description === ''){
+        description.trim();
+        if(description === ''){
             setErrorMessage('* Please enter a description')
-        }
-        else if(location === ''){
-            setErrorMessage('* Please enter a location')
         }
         else{
             props.dbFunctions.createRequest(props.aptNum, description, location, imageData)
-                .then((res) => {
+                .then(() => {
                     setErrorMessage('Request submitted')
                     setDescription(''); setLocation(''); setImageData(null);
                     setTimeout(() => window.location.reload(), 500);
@@ -37,7 +32,7 @@ function RequestsForm (props){
     };
 
     return (
-        <div>
+        <div> 
             <h3 className="text-center">Maintenance Request Form</h3>
             <form onSubmit={handleSubmit}>
                 <textarea value={description} onChange={(event) => setDescription(event.target.value)}
@@ -48,17 +43,20 @@ function RequestsForm (props){
                               }
                           }}
                           className="bg-light text-dark w-100 mt-3 " placeholder="Enter Description"/>
-                <input value={location} onChange={(event) => setLocation(event.target.value)}
-                           onKeyDown={(event) => {
-                               if(event.key === 'Enter'){
-                                   event.preventDefault();
-                                   handleSubmit();
-                               }
-                           }}
-                           className="bg-light text-dark w-25 mt-2" placeholder="Enter Location"/>
-                <input id="tenant_image" className="bg-light text-dark w-25 mt-2 mx-2 small" type="file" accept="image/*" onChange={handleImageChange} />
-                <span className={errorMessage === '' ? "text-white" : (errorMessage === 'Request submitted' ? "text-success mx-5" : "text-danger fw-semibold mx-5")}> {errorMessage} </span>
-                <Button className="bg-dark border-0 mx-2 float-end" onClick={handleSubmit}> Submit Request </Button>
+                <div className="row"> 
+                <div className="col-2">
+                <DropdownButton title={`Area: ${location}`} variant="dark" onSelect={(location) => setLocation(location)} className="col">
+                    <Dropdown.Item eventKey="Kitchen">Kitchen</Dropdown.Item>
+                    <Dropdown.Item eventKey="Living Room">Living Room</Dropdown.Item>
+                    <Dropdown.Item eventKey="Bedroom">Bedroom</Dropdown.Item>
+                    <Dropdown.Item eventKey="Bathroom">Bathroom</Dropdown.Item>
+                </DropdownButton>
+                </div>
+                <div className="col-4"> <input id="tenant_image" className="bg-light text-dark mt-2 mx-2 small" type="file" accept="image/*" onChange={handleImageChange} /> </div>
+                <div className="col-4 d-flex align-items-center"> <span className={errorMessage === '' ? "text-white" 
+                : (errorMessage === 'Request submitted' ? "text-success" : "text-danger fw-semibold")}> {errorMessage} </span> </div>
+                <div className="col-2"><Button className="bg-dark border-0 mx-2 float-end" onClick={handleSubmit}> Submit Request </Button> </div>
+                </div>
             </form>
         </div>
 )

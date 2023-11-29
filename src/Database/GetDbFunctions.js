@@ -89,14 +89,37 @@ function GetDbFunctions () {
         return res;
     }
 
-    const createAccount = async (email, name, phone) => {
+    const getAccount = async (ID) => {
+        if(db === null) return null
+        const querySnapshot = await db.collection('Accounts').where('ID', '==', ID).get();
+        let res;
+
+        if (querySnapshot.empty)
+            res = 'Account not found'
+
+        querySnapshot.forEach((doc) => {
+            res = JSON.stringify(doc.data());
+        });
+    }
+
+    const getAllAccounts = async () => {
+        if(db === null) return []
+        const querySnapshot = await db.collection('Accounts').get();
+        let res = [];
+        querySnapshot.forEach((doc) => {
+            res.push(doc.data());
+        });
+        return res;
+    }
+
+    const createAccount = async (email, name, phone, type) => {
         try {
             db.collection('Accounts').add({
                 Email: email,
                 ID: Date.now(),
                 Name: name,
                 PhoneNumber: phone,
-                Type: "Tenant"
+                Type: type
             })
         }
         catch (error) {
@@ -147,6 +170,19 @@ function GetDbFunctions () {
         }
     }
 
+    const deleteTenant = async (ID) => {
+        try {
+            db.collection('Accounts').where('ID', '==', ID).get().then(res => {
+                let docId = res.docs[0].id;
+                db.collection('Accounts').doc(docId).delete();
+            })
+            console.log('deleted', ID)
+        }
+        catch (error) {
+            console.error('Error deleting account:', error.message);
+        }
+    }
+
     /*
     const deleteRequest = async (ID) => {
         try {
@@ -161,6 +197,7 @@ function GetDbFunctions () {
         }
     }
     */
+    
 
 
 
@@ -171,7 +208,9 @@ function GetDbFunctions () {
         changeStatus,
         getApartment,
         getRequests,
-        getAllRequests
+        getAllRequests,
+        getAccount,
+        getAllAccounts
     }
 }
 

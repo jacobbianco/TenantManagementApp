@@ -68,6 +68,7 @@ function LoginView() {
                     <SignUpModal
                         modalOpen={modalOpen}
                         handleModalOpen={handleModalOpen}
+                        showType={false}
                     />
                 </Container>
             </div>
