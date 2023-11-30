@@ -1,3 +1,5 @@
+Pictures of the app in action are found in this google doc https://docs.google.com/document/d/1mFRL3Yx1QQ7VmHD63EUFK_bvq-_4QpGZ31mVM_SLqxY/edit
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
