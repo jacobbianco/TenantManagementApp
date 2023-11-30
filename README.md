@@ -1,4 +1,6 @@
 Pictures of the app in action are found in this google doc https://docs.google.com/document/d/1mFRL3Yx1QQ7VmHD63EUFK_bvq-_4QpGZ31mVM_SLqxY/edit
+Database: Google Firebase
+Web Framework: React w/ Bootstrap for styling
 
 # Getting Started with Create React App
 
