@@ -127,7 +127,7 @@ function GetDbFunctions () {
         try {
             db.collection('Accounts').add({
                 Email: email,
-                ID: Date.now(),
+                ID: ""+Date.now()+"",
                 Name: name,
                 PhoneNumber: phone,
                 Type: type
