@@ -8,7 +8,7 @@ return (
             <Modal.Header closeButton>
                 <Modal.Title className="text-center w-100">Confirmation</Modal.Title>
             </Modal.Header>
-            <Modal.Body className="text-center">Are you sure you would like to complete that {props.type}?</Modal.Body>
+            <Modal.Body className="text-center">Are you sure you would like to {props.type === 'account' ? 'delete' : 'complete'} that {props.type}?</Modal.Body>
             <Modal.Footer style={{ justifyContent: 'center' }}>
                 <Button variant="danger" onClick={props.handleClose}> No </Button>
                 <Button variant="success" onClick={props.handleConfirm}> Yes </Button>

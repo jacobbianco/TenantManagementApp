@@ -34,7 +34,7 @@ function SignUpModal (props) {
         <div>
             <Modal show={props.modalOpen} onHide={props.handleModalOpen} className="modal-lg">
                 <Modal.Header closeButton>
-                    <Modal.Title className="w-100 text-center"> Sign Up </Modal.Title>
+                    <Modal.Title className="w-100 text-center"> {props.showType ? "Create User" : "Sign Up" } </Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <div className="text-center">

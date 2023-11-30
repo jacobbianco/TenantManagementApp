@@ -39,6 +39,16 @@ function GetDbFunctions () {
         return res;
     }
 
+    const getAllApartments = async () => {
+        if(db === null) return []
+        const querySnapshot = await db.collection('Apartments').get();
+        let res = [];
+        querySnapshot.forEach((doc) => {
+            res.push(doc.data());
+        });
+        return res;
+    }
+
     const getRequests = async (aptNum) => {
         if(db === null || aptNum === undefined) return []
         const querySnapshot = await db.collection('Requests').where('ApartmentNumber', '==', aptNum).get();
@@ -91,15 +101,16 @@ function GetDbFunctions () {
 
     const getAccount = async (ID) => {
         if(db === null) return null
+        ID = ID.toString();
         const querySnapshot = await db.collection('Accounts').where('ID', '==', ID).get();
         let res;
 
         if (querySnapshot.empty)
             res = 'Account not found'
+        else
+            res = querySnapshot.docs[0].data()
 
-        querySnapshot.forEach((doc) => {
-            res = JSON.stringify(doc.data());
-        });
+        return res;
     }
 
     const getAllAccounts = async () => {
@@ -170,7 +181,36 @@ function GetDbFunctions () {
         }
     }
 
-    const deleteTenant = async (ID) => {
+    const changeAccountInfo = async (ID, fieldName, fieldValue) => {
+        const querySnapshot = await db.collection('Accounts').where('ID', '==', ID).get();
+
+        if (!querySnapshot.empty) {
+            const documentSnapshot = querySnapshot.docs[0];
+            await documentSnapshot.ref.update({
+            [fieldName]: fieldValue
+            });
+            console.log(`${fieldName} for document changed`);
+        } else {
+            console.log(`Document not found`);
+        }
+    }
+
+    //queried by apartment number
+    const changeApartmentInfo = async (aptNumber, fieldName, fieldValue) => {
+        const querySnapshot = await db.collection('Apartments').where('Number', '==', aptNumber).get();
+
+        if (!querySnapshot.empty) {
+            const documentSnapshot = querySnapshot.docs[0];
+            await documentSnapshot.ref.update({
+                [fieldName]: fieldValue
+            });
+            console.log(`${fieldName} for document changed`);
+        } else {
+            console.log(`Document not found`);
+        }
+    }
+
+    const deleteAccount = async (ID) => {
         try {
             db.collection('Accounts').where('ID', '==', ID).get().then(res => {
                 let docId = res.docs[0].id;
@@ -207,10 +247,14 @@ function GetDbFunctions () {
         createRequest,
         changeStatus,
         getApartment,
+        getAllApartments,
         getRequests,
         getAllRequests,
         getAccount,
-        getAllAccounts
+        getAllAccounts,
+        deleteAccount,
+        changeAccountInfo,
+        changeApartmentInfo
     }
 }
 
