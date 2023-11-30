@@ -19,7 +19,7 @@ const AppNavbar = (props) => {
                 <Navbar.Collapse id="basic-navbar-nav">
                     <Nav className="ms-auto">
                     <Nav.Link onClick={handleModalOpen}> Settings </Nav.Link>
-                    <Nav.Link href="/Login">Log Out</Nav.Link>
+                    <Nav.Link href="/">Log Out</Nav.Link>
                     </Nav>
                 </Navbar.Collapse>
             </Container>
